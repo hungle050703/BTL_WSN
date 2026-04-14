@@ -1,0 +1,2 @@
+../User/Services/sensor_service.c:12:6:SensorService_Init	8	static
+../User/Services/sensor_service.c:19:6:SensorService_Update	16	static

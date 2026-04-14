@@ -1,0 +1,3 @@
+../User/App/alarm_logic.c:6:6:AlarmLogic_Init	0	static
+../User/App/alarm_logic.c:10:14:Alarm_ProcessLogic	0	static
+../User/App/alarm_logic.c:24:6:Alarm_ExecuteAction	8	static
