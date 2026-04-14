@@ -114,6 +114,12 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : GPIO_DO_MH_sensor_Pin */
+  GPIO_InitStruct.Pin = GPIO_DO_MH_sensor_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIO_DO_MH_sensor_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pin : BUZZER_ALARM_Pin */
   GPIO_InitStruct.Pin = BUZZER_ALARM_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;

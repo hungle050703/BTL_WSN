@@ -5,6 +5,7 @@
 
 // Các hàm nguyên mẫu cho MQ2
 void MQ2_Init(void);
+float MQ2_GetBaseVoltage(void);
 uint32_t MQ2_ReadRawData(void);
 float MQ2_CalculateGasConcentration(uint32_t raw_adc);
 

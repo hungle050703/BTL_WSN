@@ -19,7 +19,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
-#include "gpdma.h"
 #include "icache.h"
 #include "tim.h"
 #include "usart.h"
@@ -29,6 +28,7 @@
 /* USER CODE BEGIN Includes */
 #include "sensor_service.h"
 #include "alarm_logic.h"
+#include "mq2.h"    // Đã thêm thư viện mq2.h để nhận diện được hàm MQ2_GetBaseVoltage()
 #include <stdio.h> // Để dùng printf
 #include <string.h> // Để dùng strlen
 /* USER CODE END Includes */
@@ -104,11 +104,11 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_GPDMA1_Init();
   MX_ADC1_Init();
   MX_ICACHE_Init();
   MX_TIM2_Init();
   MX_USART3_UART_Init();
+  MX_ADC2_Init();
   /* USER CODE BEGIN 2 */
   printf("System Starting...\r\n");
   HAL_TIM_Base_Start(&htim2); 
@@ -124,14 +124,37 @@ int main(void)
       // Cập nhật cảm biến (Non-blocking)
       SensorService_Update(&myData);
       float temp = myData.temperature;
+      float smoke_v = myData.smoke_conc;
+      
+      // Chuyển đổi điện áp thành phần trăm (%) để hiển thị trực quan
+      float smoke_percentage = (smoke_v / 5.0f) * 100.0f;
+      
+      // --- Phân mức độ nguy hiểm Khói/Khí Gas bằng Calibration Động ---
+      float base_v = MQ2_GetBaseVoltage(); // Lấy mức nền của lúc khởi động
+      float danger_threshold = base_v + 0.6f; // Nguy hiểm khi vọt lên +0.6V so với nền
+      char* smoke_status;
+      
+      if (smoke_v < base_v + 0.2f) { 
+          smoke_status = "SACH"; // Gần mức nền +0.2V (chấp nhận trôi nhiệt)
+      } else if (smoke_v < danger_threshold) {
+          smoke_status = "CO KHOI NHE";
+      } else {
+          smoke_status = "NGUY HIEM!";
+      }
 
-      // In ra màn hình với định dạng rõ ràng
-      printf("Nhiet do: %.2f C | Khoi: %.2f V\r\n", temp, myData.smoke_conc);
+      // Xử lý cờ Hồng ngoại / Lửa từ con MH-Sensor (DO pin - PA3)
+      char* mh_status = (myData.mh_sensor_do == 0) ? "CO LUA/VAT CAN!!" : "BINH THUONG";
+
+      // Màn hình giao diện quản lý toàn bộ Sensors
+      printf("Nhiet do: %5.2f C \r\n", temp);
+      printf("  Khoi MQ-2:   %4.1f %% - %s (Base: %.2fV | Now: %.2fV)\r\n", smoke_percentage, smoke_status, base_v, smoke_v);
+      printf("  Lua MH-SENS: %s (AO: %.2fV)\r\n", mh_status, myData.mh_sensor_ao_volt);
+      printf("----------------------------------------\r\n");
 
       static uint8_t alarm_muted = 0; // Biến lưu trạng thái đã tắt báo động
 
-      // Nếu nhiệt độ xuống mức an toàn (< 50 độ), reset trạng thái Mute để lần sau báo cháy tiếp
-      if (temp <= 50.0f) {
+      // Nếu nhiệt độ và khói và MH trở lại bình thường, reset trạng thái Mute để lần sau báo cháy tiếp
+      if (temp <= 50.0f && smoke_v <= danger_threshold && myData.mh_sensor_do == 1) {
           alarm_muted = 0;
       }
 
@@ -141,16 +164,22 @@ int main(void)
           printf("--- DA TAT BAO DONG BANG NUT NHAN! ---\r\n");
       }
 
-      // Logic điều khiển LED
-      if (temp > 50.0f && alarm_muted == 0) {
+      // Logic điều khiển LED và Còi
+      // Còi kêu khi: Lửa, quá nhiệt, HOẶC phát hiện có nhiều khói (vượt danger_threshold)
+      uint8_t is_fire = (temp > 50.0f || myData.mh_sensor_do == 0);
+      uint8_t is_heavy_smoke = (smoke_v > danger_threshold); 
+      
+      if ((is_fire || is_heavy_smoke) && alarm_muted == 0) {
           // Khi cháy và CHƯA bị tắt báo động
           HAL_GPIO_WritePin(LED_RED_ALARM_GPIO_Port, LED_RED_ALARM_Pin, GPIO_PIN_SET);   // Bật RED
-          HAL_GPIO_WritePin(LED_GREEN_ON_GPIO_Port, LED_GREEN_ON_Pin, GPIO_PIN_RESET);     // Tắt GREEN
+          HAL_GPIO_WritePin(BUZZER_ALARM_GPIO_Port, BUZZER_ALARM_Pin, GPIO_PIN_SET);     // Bật Còi
+          HAL_GPIO_WritePin(LED_GREEN_ON_GPIO_Port, LED_GREEN_ON_Pin, GPIO_PIN_RESET);   // Tắt GREEN
           printf("--- CANH BAO HOA HOAN! ---\r\n");
       } else {
           // Khi bình thường HOẶC đang cháy nhưng ĐÃ bấm nút tắt báo động
           HAL_GPIO_WritePin(LED_RED_ALARM_GPIO_Port, LED_RED_ALARM_Pin, GPIO_PIN_RESET); // Tắt RED
-          HAL_GPIO_WritePin(LED_GREEN_ON_GPIO_Port, LED_GREEN_ON_Pin, GPIO_PIN_SET);       // Bật GREEN (Ổn định)
+          HAL_GPIO_WritePin(BUZZER_ALARM_GPIO_Port, BUZZER_ALARM_Pin, GPIO_PIN_RESET);   // Tắt Còi
+          HAL_GPIO_WritePin(LED_GREEN_ON_GPIO_Port, LED_GREEN_ON_Pin, GPIO_PIN_SET);     // Bật GREEN (Ổn định)
       }
 
       HAL_Delay(1000); // Đợi 1 giây để log không bị trôi quá nhanh

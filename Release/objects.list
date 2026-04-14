@@ -1,5 +1,4 @@
 "./Core/Src/adc.o"
-"./Core/Src/gpdma.o"
 "./Core/Src/gpio.o"
 "./Core/Src/icache.o"
 "./Core/Src/main.o"

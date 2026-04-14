@@ -31,11 +31,11 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart_ex.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_exti.h \
- ../Core/Inc/adc.h ../Core/Inc/main.h ../Core/Inc/gpdma.h \
- ../Core/Inc/icache.h ../Core/Inc/tim.h ../Core/Inc/usart.h \
- ../Core/Inc/gpio.h \
- /home/hung-le/STM32Cube/Code/BTL\ _Embedded_System_Design/User/Services/sensor_service.h \
- /home/hung-le/STM32Cube/Code/BTL\ _Embedded_System_Design/User/App/alarm_logic.h
+ ../Core/Inc/adc.h ../Core/Inc/main.h ../Core/Inc/icache.h \
+ ../Core/Inc/tim.h ../Core/Inc/usart.h ../Core/Inc/gpio.h \
+ /home/hung-le/STM32Cube/Code/BTL_Embedded_System_Design/User/Services/sensor_service.h \
+ /home/hung-le/STM32Cube/Code/BTL_Embedded_System_Design/User/App/alarm_logic.h \
+ /home/hung-le/STM32Cube/Code/BTL_Embedded_System_Design/User/Drivers/mq2.h
 ../Core/Inc/main.h:
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal.h:
 ../Core/Inc/stm32h5xx_hal_conf.h:
@@ -71,10 +71,10 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_exti.h:
 ../Core/Inc/adc.h:
 ../Core/Inc/main.h:
-../Core/Inc/gpdma.h:
 ../Core/Inc/icache.h:
 ../Core/Inc/tim.h:
 ../Core/Inc/usart.h:
 ../Core/Inc/gpio.h:
-/home/hung-le/STM32Cube/Code/BTL\ _Embedded_System_Design/User/Services/sensor_service.h:
-/home/hung-le/STM32Cube/Code/BTL\ _Embedded_System_Design/User/App/alarm_logic.h:
+/home/hung-le/STM32Cube/Code/BTL_Embedded_System_Design/User/Services/sensor_service.h:
+/home/hung-le/STM32Cube/Code/BTL_Embedded_System_Design/User/App/alarm_logic.h:
+/home/hung-le/STM32Cube/Code/BTL_Embedded_System_Design/User/Drivers/mq2.h:

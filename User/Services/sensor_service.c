@@ -2,9 +2,11 @@
 #include "ds18b20.h"
 #include "mq2.h"
 
-// Biến buffer toàn cục cho DMA (Đọc 1 kênh ADC)
-uint16_t adc_dma_buffer[1];
-extern ADC_HandleTypeDef hadc1;
+extern ADC_HandleTypeDef hadc2; // Thêm ADC2 để dùng cho MH-Sensor
+
+// Không dùng DMA nữa
+// uint16_t adc_dma_buffer[1];
+// extern ADC_HandleTypeDef hadc1;
 
 static uint32_t last_ds18b20_tick = 0;
 static uint8_t ds18b20_state = 0; // 0: Idle/Request, 1: Waiting for conversion
@@ -12,8 +14,8 @@ static uint8_t ds18b20_state = 0; // 0: Idle/Request, 1: Waiting for conversion
 void SensorService_Init(void) {
     DS18B20_Init();
     MQ2_Init();
-    // Bắt chẩn đoán: Tạm tắt DMA vì nghi ngờ hadc1.DMA_Handle đang bị NULL gây HardFault
-    // HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_dma_buffer, 1);
+    // Đã chuyển phần đọc ADC của MQ-2 sang chế độ thủ công (Polling) trong mq2.c
+    // Không dùng DMA để giải quyết triệt để lỗi HardFault trên dòng STM32H5
 }
 
 void SensorService_Update(SensorData_t *data) {
@@ -37,7 +39,28 @@ void SensorService_Update(SensorData_t *data) {
         }
     }
     
-    // --- Xử lý MQ2 từ buffer DMA (Dữ liệu luôn sẵn sàng) ---
+    // --- Xử lý MQ2 từ ADC1 (Polling) ---
     data->smoke_raw = MQ2_ReadRawData();
     data->smoke_conc = MQ2_CalculateGasConcentration(data->smoke_raw);
+
+    // --- Xử lý MH-Sensor (Hồng ngoại cảnh báo lửa/vật cản) ---
+    // 1. Đọc tín hiệu Digital (DO) trên PA3
+    if (HAL_GPIO_ReadPin(GPIO_DO_MH_sensor_GPIO_Port, GPIO_DO_MH_sensor_Pin) == GPIO_PIN_RESET) {
+        data->mh_sensor_do = 0; // Kích hoạt (Có ngọn lửa/vật cản)
+    } else {
+        data->mh_sensor_do = 1; // Bình thường
+    }
+
+    // 2. Đọc tín hiệu Analog (AO) trên PB1 từ ADC2 (Polling)
+    HAL_ADC_Stop(&hadc2);  // Xóa cờ OVR nếu có
+    HAL_ADC_Start(&hadc2); // Bấm máy đo
+    if (HAL_ADC_PollForConversion(&hadc2, 10) == HAL_OK) {
+        uint32_t mh_raw = HAL_ADC_GetValue(&hadc2);
+        HAL_ADC_Stop(&hadc2); // Khóa lại
+        
+        // Đổi ra Volt (Chân PB1 chịu tối đa 3.3V)
+        data->mh_sensor_ao_volt = (float)mh_raw * (3.3f / 4095.0f);
+    } else {
+        data->mh_sensor_ao_volt = -1.0f; // Báo lỗi
+    }
 }

@@ -63,8 +63,8 @@ all: main-build
 main-build: BTL\ _Embedded_System_Design.elf secondary-outputs
 
 # Tool invocations
-BTL\ _Embedded_System_Design.elf BTL\ _Embedded_System_Design.map: $(OBJS) $(USER_OBJS) /home/hung-le/STM32Cube/Code/BTL\ _Embedded_System_Design/STM32H563ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "BTL _Embedded_System_Design.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"/home/hung-le/STM32Cube/Code/BTL _Embedded_System_Design/STM32H563ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BTL _Embedded_System_Design.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
+BTL\ _Embedded_System_Design.elf BTL\ _Embedded_System_Design.map: $(OBJS) $(USER_OBJS) /home/hung-le/STM32Cube/Code/BTL_Embedded_System_Design/STM32H563ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "BTL _Embedded_System_Design.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"/home/hung-le/STM32Cube/Code/BTL_Embedded_System_Design/STM32H563ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BTL _Embedded_System_Design.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

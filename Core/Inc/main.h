@@ -82,6 +82,8 @@ void Error_Handler(void);
 #define RMII_REF_CLK_GPIO_Port GPIOA
 #define RMII_MDIO_Pin GPIO_PIN_2
 #define RMII_MDIO_GPIO_Port GPIOA
+#define GPIO_DO_MH_sensor_Pin GPIO_PIN_3
+#define GPIO_DO_MH_sensor_GPIO_Port GPIOA
 #define VBUS_SENSE_Pin GPIO_PIN_4
 #define VBUS_SENSE_GPIO_Port GPIOA
 #define BUZZER_ALARM_Pin GPIO_PIN_5
@@ -94,6 +96,8 @@ void Error_Handler(void);
 #define RMII_RXD1_GPIO_Port GPIOC
 #define LED_GREEN_ON_Pin GPIO_PIN_0
 #define LED_GREEN_ON_GPIO_Port GPIOB
+#define ADC2_AO_MH_sensor_Pin GPIO_PIN_1
+#define ADC2_AO_MH_sensor_GPIO_Port GPIOB
 #define UCPD_CC1_Pin GPIO_PIN_13
 #define UCPD_CC1_GPIO_Port GPIOB
 #define UCPD_CC2_Pin GPIO_PIN_14

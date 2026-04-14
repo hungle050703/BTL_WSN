@@ -32,8 +32,8 @@ User/Services/sensor_service.o: ../User/Services/sensor_service.c \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart_ex.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_exti.h \
- /home/hung-le/STM32Cube/Code/BTL\ _Embedded_System_Design/User/Drivers/ds18b20.h \
- /home/hung-le/STM32Cube/Code/BTL\ _Embedded_System_Design/User/Drivers/mq2.h
+ /home/hung-le/STM32Cube/Code/BTL_Embedded_System_Design/User/Drivers/ds18b20.h \
+ /home/hung-le/STM32Cube/Code/BTL_Embedded_System_Design/User/Drivers/mq2.h
 ../User/Services/sensor_service.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal.h:
@@ -68,5 +68,5 @@ User/Services/sensor_service.o: ../User/Services/sensor_service.c \
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart.h:
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart_ex.h:
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_exti.h:
-/home/hung-le/STM32Cube/Code/BTL\ _Embedded_System_Design/User/Drivers/ds18b20.h:
-/home/hung-le/STM32Cube/Code/BTL\ _Embedded_System_Design/User/Drivers/mq2.h:
+/home/hung-le/STM32Cube/Code/BTL_Embedded_System_Design/User/Drivers/ds18b20.h:
+/home/hung-le/STM32Cube/Code/BTL_Embedded_System_Design/User/Drivers/mq2.h:
