@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os2.h"
 #include "adc.h"
 #include "icache.h"
 #include "tim.h"
@@ -57,6 +58,7 @@ SensorData_t myData;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MPU_Config(void);
+void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -109,6 +111,7 @@ int main(void)
   MX_TIM2_Init();
   MX_USART3_UART_Init();
   MX_ADC2_Init();
+  MX_UART5_Init();
   /* USER CODE BEGIN 2 */
   printf("System Starting...\r\n");
   HAL_TIM_Base_Start(&htim2); 
@@ -117,72 +120,23 @@ int main(void)
   printf("Init Done! BTL He Thong Nhung 2026\r\n");
   /* USER CODE END 2 */
 
+  /* Init scheduler */
+  osKernelInitialize();
+  /* Call init function for freertos objects (in app_freertos.c) */
+  MX_FREERTOS_Init();
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  // Vòng lặp while(1) bị vô hiệu hóa vì đã chuyển sang dùng FreeRTOS
   while (1)
   {
-      // Cập nhật cảm biến (Non-blocking)
-      SensorService_Update(&myData);
-      float temp = myData.temperature;
-      float smoke_v = myData.smoke_conc;
-      
-      // Chuyển đổi điện áp thành phần trăm (%) để hiển thị trực quan
-      float smoke_percentage = (smoke_v / 5.0f) * 100.0f;
-      
-      // --- Phân mức độ nguy hiểm Khói/Khí Gas bằng Calibration Động ---
-      float base_v = MQ2_GetBaseVoltage(); // Lấy mức nền của lúc khởi động
-      float danger_threshold = base_v + 0.6f; // Nguy hiểm khi vọt lên +0.6V so với nền
-      char* smoke_status;
-      
-      if (smoke_v < base_v + 0.2f) { 
-          smoke_status = "SACH"; // Gần mức nền +0.2V (chấp nhận trôi nhiệt)
-      } else if (smoke_v < danger_threshold) {
-          smoke_status = "CO KHOI NHE";
-      } else {
-          smoke_status = "NGUY HIEM!";
-      }
-
-      // Xử lý cờ Hồng ngoại / Lửa từ con MH-Sensor (DO pin - PA3)
-      char* mh_status = (myData.mh_sensor_do == 0) ? "CO LUA/VAT CAN!!" : "BINH THUONG";
-
-      // Màn hình giao diện quản lý toàn bộ Sensors
-      printf("Nhiet do: %5.2f C \r\n", temp);
-      printf("  Khoi MQ-2:   %4.1f %% - %s (Base: %.2fV | Now: %.2fV)\r\n", smoke_percentage, smoke_status, base_v, smoke_v);
-      printf("  Lua MH-SENS: %s (AO: %.2fV)\r\n", mh_status, myData.mh_sensor_ao_volt);
-      printf("----------------------------------------\r\n");
-
-      static uint8_t alarm_muted = 0; // Biến lưu trạng thái đã tắt báo động
-
-      // Nếu nhiệt độ và khói và MH trở lại bình thường, reset trạng thái Mute để lần sau báo cháy tiếp
-      if (temp <= 50.0f && smoke_v <= danger_threshold && myData.mh_sensor_do == 1) {
-          alarm_muted = 0;
-      }
-
-      // Kiểm tra nút nhấn BTN1_USER (PC13 - Nút B1 màu xanh trên board) để TẮT BÁO ĐỘNG (Mute)
-      if (HAL_GPIO_ReadPin(BTN1_USER_GPIO_Port, BTN1_USER_Pin) == GPIO_PIN_SET) {
-          alarm_muted = 1; // Ghi nhớ là người dùng đã tắt báo động
-          printf("--- DA TAT BAO DONG BANG NUT NHAN! ---\r\n");
-      }
-
-      // Logic điều khiển LED và Còi
-      // Còi kêu khi: Lửa, quá nhiệt, HOẶC phát hiện có nhiều khói (vượt danger_threshold)
-      uint8_t is_fire = (temp > 50.0f || myData.mh_sensor_do == 0);
-      uint8_t is_heavy_smoke = (smoke_v > danger_threshold); 
-      
-      if ((is_fire || is_heavy_smoke) && alarm_muted == 0) {
-          // Khi cháy và CHƯA bị tắt báo động
-          HAL_GPIO_WritePin(LED_RED_ALARM_GPIO_Port, LED_RED_ALARM_Pin, GPIO_PIN_SET);   // Bật RED
-          HAL_GPIO_WritePin(BUZZER_ALARM_GPIO_Port, BUZZER_ALARM_Pin, GPIO_PIN_SET);     // Bật Còi
-          HAL_GPIO_WritePin(LED_GREEN_ON_GPIO_Port, LED_GREEN_ON_Pin, GPIO_PIN_RESET);   // Tắt GREEN
-          printf("--- CANH BAO HOA HOAN! ---\r\n");
-      } else {
-          // Khi bình thường HOẶC đang cháy nhưng ĐÃ bấm nút tắt báo động
-          HAL_GPIO_WritePin(LED_RED_ALARM_GPIO_Port, LED_RED_ALARM_Pin, GPIO_PIN_RESET); // Tắt RED
-          HAL_GPIO_WritePin(BUZZER_ALARM_GPIO_Port, BUZZER_ALARM_Pin, GPIO_PIN_RESET);   // Tắt Còi
-          HAL_GPIO_WritePin(LED_GREEN_ON_GPIO_Port, LED_GREEN_ON_Pin, GPIO_PIN_SET);     // Bật GREEN (Ổn định)
-      }
-
-      HAL_Delay(1000); // Đợi 1 giây để log không bị trôi quá nhanh
+      // Toàn bộ logic đã được chuyển sang app_freertos.c
+      HAL_Delay(1000); 
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -282,6 +236,28 @@ void MPU_Config(void)
   /* Enables the MPU */
   HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
 
+}
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM6 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM6)
+  {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
 }
 
 /**

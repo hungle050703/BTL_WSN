@@ -88,12 +88,6 @@ void Error_Handler(void);
 #define VBUS_SENSE_GPIO_Port GPIOA
 #define BUZZER_ALARM_Pin GPIO_PIN_5
 #define BUZZER_ALARM_GPIO_Port GPIOA
-#define RMII_CRS_DV_Pin GPIO_PIN_7
-#define RMII_CRS_DV_GPIO_Port GPIOA
-#define RMII_RXD0_Pin GPIO_PIN_4
-#define RMII_RXD0_GPIO_Port GPIOC
-#define RMII_RXD1_Pin GPIO_PIN_5
-#define RMII_RXD1_GPIO_Port GPIOC
 #define LED_GREEN_ON_Pin GPIO_PIN_0
 #define LED_GREEN_ON_GPIO_Port GPIOB
 #define ADC2_AO_MH_sensor_Pin GPIO_PIN_1
@@ -120,6 +114,14 @@ void Error_Handler(void);
 #define SWCLK_GPIO_Port GPIOA
 #define T_JTDI_Pin GPIO_PIN_15
 #define T_JTDI_GPIO_Port GPIOA
+#define A7677_UART5_TX_Pin GPIO_PIN_12
+#define A7677_UART5_TX_GPIO_Port GPIOC
+#define A7677_RST_Pin GPIO_PIN_0
+#define A7677_RST_GPIO_Port GPIOD
+#define A7677_PWRKEY_Pin GPIO_PIN_1
+#define A7677_PWRKEY_GPIO_Port GPIOD
+#define A7677_UART5_RX_Pin GPIO_PIN_2
+#define A7677_UART5_RX_GPIO_Port GPIOD
 #define RMII_TXT_EN_Pin GPIO_PIN_11
 #define RMII_TXT_EN_GPIO_Port GPIOG
 #define RMI_TXD0_Pin GPIO_PIN_13
