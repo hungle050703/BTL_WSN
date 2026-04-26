@@ -33,28 +33,14 @@
 /* USER CODE END 1 */
 
 /** Configure pins
-     PE2   ------> DEBUG_TRACECLK
-     PE3   ------> DEBUG_TRACED0
-     PE4   ------> DEBUG_TRACED1
-     PE5   ------> DEBUG_TRACED2
-     PE6   ------> DEBUG_TRACED3
      PC14-OSC32_IN(OSC32_IN)   ------> RCC_OSC32_IN
      PC15-OSC32_OUT(OSC32_OUT)   ------> RCC_OSC32_OUT
      PH0-OSC_IN(PH0)   ------> RCC_OSC_IN
-     PC1   ------> ETH_MDC
-     PA1   ------> ETH_REF_CLK
-     PA2   ------> ETH_MDIO
-     PB13   ------> UCPD1_CC1
-     PB14   ------> UCPD1_CC2
-     PB15   ------> ETH_TXD1
-     PA9   ------> UCPD1_DB1
      PA11   ------> USB_DM
      PA12   ------> USB_DP
      PA13(JTMS/SWDIO)   ------> DEBUG_JTMS-SWDIO
      PA14(JTCK/SWCLK)   ------> DEBUG_JTCK-SWCLK
      PA15(JTDI)   ------> DEBUG_JTDI
-     PG11   ------> ETH_TX_EN
-     PG13   ------> ETH_TXD0
      PB3(JTDO/TRACESWO)   ------> DEBUG_JTDO-SWO
      PB6   ------> LPUART1_TX
      PB7   ------> LPUART1_RX
@@ -65,7 +51,6 @@ void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
@@ -91,28 +76,12 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(BTN1_USER_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : RMII_MDC_Pin */
-  GPIO_InitStruct.Pin = RMII_MDC_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
-  HAL_GPIO_Init(RMII_MDC_GPIO_Port, &GPIO_InitStruct);
-
   /*Configure GPIO pin : GPIO_DATA_DB12_Pin */
   GPIO_InitStruct.Pin = GPIO_DATA_DB12_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   HAL_GPIO_Init(GPIO_DATA_DB12_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : RMII_REF_CLK_Pin RMII_MDIO_Pin */
-  GPIO_InitStruct.Pin = RMII_REF_CLK_Pin|RMII_MDIO_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pin : GPIO_DO_MH_sensor_Pin */
   GPIO_InitStruct.Pin = GPIO_DO_MH_sensor_Pin;
@@ -133,20 +102,6 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED_GREEN_ON_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : UCPD_CC1_Pin UCPD_CC2_Pin */
-  GPIO_InitStruct.Pin = UCPD_CC1_Pin|UCPD_CC2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : RMII_TXD1_Pin */
-  GPIO_InitStruct.Pin = RMII_TXD1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
-  HAL_GPIO_Init(RMII_TXD1_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : LED_RED_ALARM_Pin */
   GPIO_InitStruct.Pin = LED_RED_ALARM_Pin;
@@ -175,14 +130,6 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : RMII_TXT_EN_Pin RMI_TXD0_Pin */
-  GPIO_InitStruct.Pin = RMII_TXT_EN_Pin|RMI_TXD0_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
-  HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
   /*Configure GPIO pins : ARD_D1_TX_Pin ARD_D0_RX_Pin */
   GPIO_InitStruct.Pin = ARD_D1_TX_Pin|ARD_D0_RX_Pin;

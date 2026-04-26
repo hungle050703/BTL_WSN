@@ -200,7 +200,7 @@ void StartDefaultTask(void *argument)
 }
 
 /* Private application code --------------------------------------------------*/
-  /* USER CODE BEGIN Application */
+/* USER CODE BEGIN Application */
 
 /* MỘT LUỒNG (THREAD) HOÀN TOÀN TÁCH BIỆT DÀNH RIÊNG CHO MẠNG 4G */
 void Start4GTask(void *argument)
