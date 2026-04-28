@@ -1,0 +1,17 @@
+../User/Drivers/sx1278.c:9:9:SX1278_ReadRegister	24	static
+../User/Drivers/sx1278.c:19:6:SX1278_WriteRegister	24	static
+../User/Drivers/sx1278.c:28:5:SX1278_Begin	24	static
+../User/Drivers/sx1278.c:56:6:SX1278_SetFrequency	32	static
+../User/Drivers/sx1278.c:63:6:SX1278_Sleep	8	static
+../User/Drivers/sx1278.c:67:6:SX1278_Idle	8	static
+../User/Drivers/sx1278.c:71:6:SX1278_SetTxPower	16	static
+../User/Drivers/sx1278.c:81:6:SX1278_SetSpreadingFactor	16	static
+../User/Drivers/sx1278.c:90:6:SX1278_SetSignalBandwidth	24	static
+../User/Drivers/sx1278.c:96:6:SX1278_SetCodingRate4	24	static
+../User/Drivers/sx1278.c:101:6:SX1278_SetPreambleLength	16	static
+../User/Drivers/sx1278.c:106:6:SX1278_SetSyncWord	16	static
+../User/Drivers/sx1278.c:110:6:SX1278_Receive	16	static
+../User/Drivers/sx1278.c:118:5:SX1278_ParsePacket	24	static
+../User/Drivers/sx1278.c:135:9:SX1278_Read	8	static
+../User/Drivers/sx1278.c:139:6:SX1278_ReadBuffer	32	static
+../User/Drivers/sx1278.c:146:6:SX1278_Init	8	static

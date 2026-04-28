@@ -1,3 +1,0 @@
-../User/App/alarm_logic.c:6:6:AlarmLogic_Init	1
-../User/App/alarm_logic.c:10:14:Alarm_ProcessLogic	9
-../User/App/alarm_logic.c:24:6:Alarm_ExecuteAction	3

@@ -1,0 +1,3 @@
+../Core/Src/app_freertos.c:85:6:MX_FREERTOS_Init	1
+../Core/Src/app_freertos.c:131:6:StartDefaultTask	6
+../Core/Src/app_freertos.c:188:6:StartSim4GTxTask	2

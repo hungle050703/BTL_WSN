@@ -1,7 +1,0 @@
-../User/Drivers/ds18b20.c:7:6:delay_us	0	static
-../User/Drivers/ds18b20.c:17:9:DS18B20_Start	8	static
-../User/Drivers/ds18b20.c:42:6:DS18B20_Write	16	static
-../User/Drivers/ds18b20.c:63:9:DS18B20_Read	16	static
-../User/Drivers/ds18b20.c:86:6:DS18B20_Init	0	static
-../User/Drivers/ds18b20.c:92:7:DS18B20_ReadTemperature	8	static
-../User/Drivers/ds18b20.c:119:7:DS18B20_ReadTemperature_NonBlocking	8	static

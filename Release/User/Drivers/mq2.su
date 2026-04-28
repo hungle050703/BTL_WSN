@@ -1,4 +1,0 @@
-../User/Drivers/mq2.c:9:6:MQ2_Init	24	static
-../User/Drivers/mq2.c:28:7:MQ2_GetBaseVoltage	0	static
-../User/Drivers/mq2.c:32:10:MQ2_ReadRawData	8	static
-../User/Drivers/mq2.c:51:7:MQ2_CalculateGasConcentration	0	static
